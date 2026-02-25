@@ -4,8 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { RouterLink } from '@angular/router';
-import { EventService } from '../services/event';
-import { Event } from '../models/event';
+
+import { EventService } from '../services/event.services';
+import { EventItem } from '../models/event.model';
 
 @Component({
   selector: 'app-event-list',
@@ -14,25 +15,48 @@ import { Event } from '../models/event';
   template: `
     <div class="container">
       <h2 class="page-title">Upcoming <span class="red-text">Events</span></h2>
-      <div class="grid">
+
+      <p *ngIf="loading">Loading events...</p>
+      <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+      <p *ngIf="!loading && !errorMsg && events.length === 0">No events found.</p>
+
+      <div class="grid" *ngIf="!loading && !errorMsg && events.length > 0">
         <mat-card *ngFor="let event of events" class="event-card">
           <div class="image-wrapper">
-             <img [src]="event.imageUrl" alt="Event image">
-             <div class="price-tag">{{ event.price | currency:'INR':'symbol':'1.0-0' }}</div>
+            <img
+              [src]="event.imageUrl || 'https://via.placeholder.com/400x200'"
+              alt="Event image"
+            />
+            <div class="price-tag">{{ event.price | currency:'INR':'symbol':'1.0-0' }}</div>
           </div>
+
           <mat-card-header>
             <mat-card-title>{{ event.title }}</mat-card-title>
-            <mat-card-subtitle class="custom-subtitle">{{ event.date | date }}</mat-card-subtitle>
+            <mat-card-subtitle class="custom-subtitle">
+              {{ event.date | date }}
+            </mat-card-subtitle>
           </mat-card-header>
+
           <mat-card-content>
             <p>{{ event.description }}</p>
             <mat-chip-listbox>
-                <mat-chip color="accent" selected>{{ event.category }}</mat-chip>
+              <mat-chip color="accent" selected>{{ event.category }}</mat-chip>
             </mat-chip-listbox>
           </mat-card-content>
+
           <mat-card-actions align="end">
-             <button *ngIf="event.availableTickets === 0" mat-raised-button disabled>Sold Out</button>
-             <button *ngIf="event.availableTickets > 0" mat-raised-button color="primary" [routerLink]="['/event', event.id]">Book Now</button>
+            <button *ngIf="event.availableTickets === 0" mat-raised-button disabled>
+              Sold Out
+            </button>
+
+            <button
+              *ngIf="event.availableTickets > 0"
+              mat-raised-button
+              color="primary"
+              [routerLink]="['/event', event.id]"
+            >
+              Book Now
+            </button>
           </mat-card-actions>
         </mat-card>
       </div>
@@ -46,20 +70,31 @@ import { Event } from '../models/event';
     .event-card { transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; background-color: #1e1e1e; color: white; }
     .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(98, 0, 234, 0.4); border-color: #6200ea; }
     .image-wrapper { position: relative; height: 200px; overflow: hidden; }
-    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; display:block; }
     .price-tag { position: absolute; top: 10px; right: 10px; background: #d50000; color: white; padding: 5px 10px; font-weight: bold; border-radius: 4px; }
     .custom-subtitle { color: #aaa !important; margin-top: 5px; }
     mat-card-content { margin-top: 15px; min-height: 80px; }
+    .error { color: #ff6b6b; margin-bottom: 12px; }
   `]
 })
 export class EventList implements OnInit {
-  events: Event[] = [];
+  events: EventItem[] = [];
+  loading = true;
+  errorMsg = '';
 
   constructor(private eventService: EventService) {}
 
-  ngOnInit() {
-    this.eventService.getEvents().subscribe((data: Event[]) => {
-      this.events = data;
+  ngOnInit(): void {
+    this.eventService.getEvents().subscribe({
+      next: (data: EventItem[]) => {
+        this.events = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMsg =
+          'Failed to load events. Make sure JSON Server is running on http://localhost:3000';
+        this.loading = false;
+      }
     });
   }
 }

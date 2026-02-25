@@ -9,5 +9,7 @@ export const routes: Routes = [
     { path: 'login', component: Login },     // Login Page
     { path: 'events', component: EventList },// Events Grid
     { path: 'event/:id', component: EventDetail }, // Detail
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '' },
+    {path: 'bookings',loadComponent: () => import('./bookings/bookings').then(m => m.Bookings)
+}
 ];

@@ -1,0 +1,27 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Tech Conference 2026",
+      "category": "Tech",
+      "date": "2026-04-10",
+      "location": "Bangalore",
+      "price": 499,
+      "availableTickets": 120,
+      "featured": true,
+      "description": "A conference on modern web + AI."
+    },
+    {
+      "id": 2,
+      "title": "Music Night",
+      "category": "Music",
+      "date": "2026-03-18",
+      "location": "Bangalore",
+      "price": 299,
+      "availableTickets": 0,
+      "featured": false,
+      "description": "Live music event."
+    }
+  ],
+  "bookings": []
+}

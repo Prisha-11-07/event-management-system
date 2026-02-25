@@ -4,10 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "api": "json-server --watch db.json --port 3000",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:event-management-system": "node dist/event-management-system/server/server.mjs"
+
   },
   "prettier": {
     "printWidth": 100,
@@ -46,6 +48,7 @@
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "jsdom": "^27.1.0",
+    "json-server": "^1.0.0-beta.9",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }
