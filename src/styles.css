@@ -1,0 +1,56 @@
+/* Reset and Base Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #050505; /* Deep Black Background */
+  color: #ffffff; /* White Text */
+}
+
+/* --- THEME COLORS --- */
+:root {
+  --primary-purple: #6200ea; /* Deep Purple */
+  --accent-red: #d50000;    /* Bright Red */
+  --card-dark: #1e1e1e;     /* Dark Grey for Cards */
+  --text-grey: #b0b0b0;
+}
+
+/* Overriding Material Design for Dark Mode */
+.mat-mdc-card {
+  background-color: var(--card-dark) !important;
+  color: white !important;
+  border: 1px solid #333;
+}
+
+/* Toolbar Override */
+.mat-toolbar.mat-primary {
+  background: linear-gradient(90deg, #30006b 0%, #6200ea 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(98, 0, 234, 0.5);
+}
+
+/* Button Overrides */
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--primary-purple) !important;
+  color: white !important;
+}
+
+.mat-mdc-raised-button.mat-accent {
+  background-color: var(--accent-red) !important;
+  color: white !important;
+}
+
+/* Form Fields Dark Mode */
+.mdc-text-field {
+  background-color: #2c2c2c !important; 
+  color: white !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #2c2c2c !important;
+}
+.mat-mdc-form-field-input-control {
+    color: white !important;
+}
+.mat-mdc-form-field .mat-mdc-floating-label {
+    color: #ccc !important;
+}
