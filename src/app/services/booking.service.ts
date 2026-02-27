@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Booking {
-  id?: string | number;     // ✅ supports JSON Server id as string or number
-  eventId: string | number; // ✅ your db shows eventId as "1" (string)
+  id?: string | number;     // JSON Server id can be string/number
+  eventId: string | number; // your db shows eventId as "1"
+  eventTitle?: string;      // ✅ NEW: store event title
+
   name: string;
   email: string;
   phone: string;
@@ -26,12 +28,12 @@ export class BookingService {
     return this.http.get<Booking[]>(this.apiUrl);
   }
 
-  // ✅ delete booking (cancel)
+  // cancel booking
   cancelBooking(id: string | number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // ✅ alias: some files call deleteBooking()
+  // alias if any file calls deleteBooking()
   deleteBooking(id: string | number): Observable<void> {
     return this.cancelBooking(id);
   }

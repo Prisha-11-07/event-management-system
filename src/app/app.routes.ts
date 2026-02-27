@@ -10,7 +10,6 @@ export const routes: Routes = [
   { path: 'events', component: EventList },
   { path: 'event/:id', component: EventDetail },
 
-  // ✅ Bookings page (lazy load standalone component)
   {
     path: 'bookings',
     loadComponent: () =>

@@ -12,8 +12,14 @@ import { Navbar } from './navbar/navbar';
       <router-outlet></router-outlet>
     </main>
   `,
-  styles: [`
-    main { padding: 0; background: #050505; min-height: 100vh; }
-  `]
+  styles: [
+    `
+      main {
+        padding: 0;
+        background: #050505;
+        min-height: 100vh;
+      }
+    `,
+  ],
 })
 export class App {}
