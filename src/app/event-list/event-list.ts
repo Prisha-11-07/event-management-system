@@ -1,134 +1,160 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { RouterLink } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 import { EventService } from '../services/event.services';
 import { EventItem } from '../models/event.model';
 
+import { CategoryFilterPipe } from '../pipes/category-filter.pipe';
+import { HighlightEventDirective } from '../directives/highlight-event.directive';
+
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatChipsModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    CategoryFilterPipe,
+    HighlightEventDirective,
+  ],
   template: `
-    <div class="container">
-      <h2 class="page-title">Upcoming <span class="red-text">Events</span></h2>
+    <div class="wrap">
+      <h1 class="title">Events</h1>
 
-      <p *ngIf="loading">Loading events...</p>
-      <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
-      <p *ngIf="!loading && !errorMsg && events.length === 0">No events found.</p>
+      <!-- Filter -->
+      <div class="filter">
+        <mat-form-field appearance="fill">
+          <mat-label>Filter by Category</mat-label>
+          <mat-select [(value)]="selectedCategory">
+            <mat-option value="All">All</mat-option>
 
-      <div class="grid" *ngIf="!loading && !errorMsg && events.length > 0">
-        <mat-card *ngFor="let event of events" class="event-card">
-          <div class="image-wrapper">
+            <mat-option *ngFor="let c of (categories$ | async)" [value]="c">
+              {{ c }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <ng-container *ngIf="events$ | async as events; else loadingTpl">
+        <p *ngIf="events.length === 0">No events found.</p>
+
+        <div class="grid" *ngIf="events.length > 0">
+          <mat-card
+            class="card"
+            *ngFor="let event of (events | categoryFilter:selectedCategory)"
+            [highlightEvent]="toNum(event.availableTickets)"
+            [featured]="!!event.featured"
+          >
             <img
-              [src]="event.imageUrl || 'https://via.placeholder.com/400x200'"
+              class="img"
+              [src]="event.imageUrl || 'https://via.placeholder.com/900x350'"
               alt="Event image"
             />
-            <div class="price-tag">
-              {{ event.price | currency:'INR':'symbol':'1.0-0' }}
-            </div>
-          </div>
 
-          <mat-card-header>
-            <mat-card-title>{{ event.title }}</mat-card-title>
-            <mat-card-subtitle class="custom-subtitle">
-              {{ event.date | date }}
-            </mat-card-subtitle>
-          </mat-card-header>
+            <mat-card-content>
+              <div class="badge" *ngIf="event.featured">FEATURED</div>
+              <div class="sold" *ngIf="toNum(event.availableTickets) === 0">SOLD OUT</div>
 
-          <mat-card-content>
-            <p>{{ event.description }}</p>
-            <mat-chip-listbox>
-              <mat-chip color="accent" selected>{{ event.category }}</mat-chip>
-            </mat-chip-listbox>
-          </mat-card-content>
+              <h2 class="name">{{ event.title }}</h2>
+              <p class="meta">{{ event.date | date:'fullDate' }} • {{ event.location }}</p>
 
-          <mat-card-actions align="end">
-            <!-- SOLD OUT -->
-            <button
-              mat-raised-button
-              color="warn"
-              class="soldout-btn"
-              *ngIf="toNum(event.availableTickets) === 0"
-            >
-              Sold Out
-            </button>
+              <p class="meta">
+                <b>Category:</b> {{ event.category }} |
+                <b>Price:</b> {{ event.price | currency:'INR':'symbol':'1.0-0' }}
+              </p>
 
-            <!-- BOOK NOW -->
-            <button
-              mat-raised-button
-              color="primary"
-              *ngIf="toNum(event.availableTickets) > 0"
-              [routerLink]="['/event', event.id]"
-            >
-              Book Now
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+              <p class="meta"><b>Tickets Left:</b> {{ event.availableTickets }}</p>
+
+              <div class="actions">
+                <a mat-raised-button color="primary" [routerLink]="['/event', event.id]">
+                  View Details
+                </a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </ng-container>
+
+      <ng-template #loadingTpl>
+        <p>Loading events...</p>
+      </ng-template>
     </div>
   `,
   styles: [`
-    .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
-    .page-title { font-size: 2.5rem; margin-bottom: 30px; border-left: 5px solid #6200ea; padding-left: 15px; }
-    .red-text { color: #d50000; }
+    .wrap { max-width: 1100px; margin: 20px auto; padding: 14px; color: white; }
+    .title { font-size: 32px; margin: 10px 0 18px; }
+    .filter { width: 320px; margin-bottom: 14px; }
+    mat-form-field { width: 100%; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-
-    .event-card { transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; background-color: #1e1e1e; color: white; }
-    .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(98, 0, 234, 0.4); border-color: #6200ea; }
-
-    .image-wrapper { position: relative; height: 200px; overflow: hidden; }
-    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .price-tag { position: absolute; top: 10px; right: 10px; background: #d50000; color: white; padding: 5px 10px; font-weight: bold; border-radius: 4px; }
-
-    .custom-subtitle { color: #aaa !important; margin-top: 5px; }
-    mat-card-content { margin-top: 15px; min-height: 80px; }
-
-    .error { color: #ff6b6b; margin-bottom: 12px; }
-
-    /* Make SOLD OUT visible */
-    .soldout-btn {
-      opacity: 1 !important;
-      pointer-events: none;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
     }
-  `]
+
+    .card { background: #1e1e1e; border-radius: 14px; overflow: hidden; }
+    .img { width: 100%; height: 170px; object-fit: cover; display: block; }
+
+    .name { margin: 10px 0 6px; font-size: 20px; }
+    .meta { margin: 4px 0; opacity: 0.9; }
+
+    .actions { margin-top: 12px; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #8b5cf6;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .sold {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: crimson;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+      margin-left: 8px;
+    }
+  `],
 })
-export class EventList implements OnInit {
-  events: EventItem[] = [];
-  loading = true;
-  errorMsg = '';
+export class EventList {
+  selectedCategory = 'All';
 
-  constructor(
-    private eventService: EventService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  // ✅ declare only (no initialization here)
+  events$!: Observable<EventItem[]>;
+  categories$!: Observable<string[]>;
 
-  ngOnInit(): void {
-    this.loading = true;
-    this.errorMsg = '';
+  constructor(private eventService: EventService) {
+    // ✅ initialize AFTER DI is ready
+    this.events$ = this.eventService.getEvents();
 
-    this.eventService.getEvents().subscribe({
-      next: (data: EventItem[]) => {
-        this.events = data ?? [];
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.log('Events API error:', err);
-        this.errorMsg = 'Failed to load events. Check JSON Server (http://localhost:3000)';
-        this.events = [];
-        this.loading = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.categories$ = this.events$.pipe(
+      map((events) => {
+        const set = new Set<string>();
+        (events ?? []).forEach((e) => {
+          if (e.category) set.add(e.category);
+        });
+        return Array.from(set).sort();
+      })
+    );
   }
 
-  /* Helper to fix Number() template error */
   toNum(value: any): number {
     return typeof value === 'number' ? value : Number(value);
   }

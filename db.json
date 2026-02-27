@@ -7,7 +7,7 @@
       "date": "2026-04-10",
       "location": "Bangalore",
       "price": 499,
-      "availableTickets": 108,
+      "availableTickets": 103,
       "featured": true,
       "description": "A conference on modern web + AI.",
       "imageUrl": "https://picsum.photos/800/400?random=1"
@@ -27,24 +27,6 @@
   ],
   "bookings": [
     {
-      "id": "9ab2",
-      "eventId": "1",
-      "name": "Prisha Sathishkumar",
-      "email": "prisha12225@gmail.com",
-      "phone": "9876543210",
-      "ticketCount": 2,
-      "bookedAt": "2026-02-27T16:21:41.147Z"
-    },
-    {
-      "id": "6308",
-      "eventId": "1",
-      "name": "Prisha Sathishkumar",
-      "email": "prisha12225@gmail.com",
-      "phone": "9635278242",
-      "ticketCount": 1,
-      "bookedAt": "2026-02-27T16:25:30.263Z"
-    },
-    {
       "id": "79bd",
       "eventId": "1",
       "name": "Prisha Sathishkumar",
@@ -61,6 +43,24 @@
       "phone": "6533593690",
       "ticketCount": 1,
       "bookedAt": "2026-02-27T16:32:13.375Z"
+    },
+    {
+      "id": "8b64",
+      "eventId": "1",
+      "name": "dinesh",
+      "email": "dinesh@gmail.com",
+      "phone": "6897532573",
+      "ticketCount": 1,
+      "bookedAt": "2026-02-27T16:58:13.884Z"
+    },
+    {
+      "id": "c372",
+      "eventId": "1",
+      "name": "jash",
+      "email": "jash@gmail.com",
+      "phone": "6872989134",
+      "ticketCount": 1,
+      "bookedAt": "2026-02-27T17:44:32.293Z"
     }
   ]
 }

@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+
 import { BookingService, Booking } from '../services/booking.service';
+import { ConfirmDialog } from './confirm-dialog';
 
 @Component({
   selector: 'app-bookings',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule, MatSnackBarModule, MatButtonModule],
   template: `
     <div class="container">
       <h1 class="title">My <span>Bookings</span></h1>
@@ -25,7 +31,9 @@ import { BookingService, Booking } from '../services/booking.service';
             <p><b>Event:</b> {{ b.eventTitle || ('Event #' + b.eventId) }}</p>
             <p *ngIf="b.bookedAt"><b>Booked At:</b> {{ b.bookedAt | date:'medium' }}</p>
 
-            <button (click)="cancelBooking(b.id)">Cancel Booking</button>
+            <button mat-raised-button color="warn" (click)="confirmCancel(b.id)">
+              Cancel Booking
+            </button>
           </div>
         </ng-container>
       </ng-container>
@@ -56,35 +64,42 @@ import { BookingService, Booking } from '../services/booking.service';
         border-radius: 12px;
       }
       button {
-        background: crimson;
-        border: none;
-        padding: 10px 14px;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
         margin-top: 10px;
       }
     `,
   ],
 })
 export class BookingsComponent {
-  bookings$!: Observable<Booking[]>; // ✅ declare first
+  bookings$!: Observable<Booking[]>;
 
-  constructor(private bookingService: BookingService) {
-    // ✅ initialize AFTER service exists
+  constructor(
+    private bookingService: BookingService,
+    private dialog: MatDialog,
+    private snack: MatSnackBar
+  ) {
     this.bookings$ = this.bookingService.getBookings();
   }
 
-  cancelBooking(id: string | number | undefined) {
+  confirmCancel(id: string | number | undefined) {
     if (id === undefined || id === null) return;
 
-    this.bookingService.cancelBooking(id).subscribe({
-      next: () => {
-        alert('Booking cancelled ✅');
-        // ✅ reload list after cancel
-        this.bookings$ = this.bookingService.getBookings();
-      },
-      error: (err) => console.error('Cancel error:', err),
+    const ref = this.dialog.open(ConfirmDialog, {
+      width: '360px',
+      data: { message: 'Are you sure you want to cancel this booking?' },
+    });
+
+    ref.afterClosed().subscribe((yes: boolean) => {
+      if (!yes) return;
+
+      this.bookingService.cancelBooking(id).subscribe({
+        next: () => {
+          this.snack.open('Booking cancelled ✅', 'Close', { duration: 2000 });
+          this.bookings$ = this.bookingService.getBookings(); // reload
+        },
+        error: () => {
+          this.snack.open('Cancel failed ❌', 'Close', { duration: 2000 });
+        },
+      });
     });
   }
 

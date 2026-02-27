@@ -1,44 +1,59 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, MatToolbarModule, MatButtonModule, MatSnackBarModule],
   template: `
-    <mat-toolbar color="primary">
-      <span class="brand" routerLink="/">JDPA Events</span>
+    <mat-toolbar class="toolbar">
+      <span class="brand">JDPA Events</span>
+
       <span class="spacer"></span>
 
-      <button
-        mat-button
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        Home
-      </button>
+      <a mat-button routerLink="/">Home</a>
+      <a mat-button routerLink="/events">Events</a>
 
-      <button mat-button routerLink="/events" routerLinkActive="active">
-        Events
-      </button>
+      <!-- ✅ bookings blocked if not logged in -->
+      <button mat-button (click)="goBookings()">Bookings</button>
 
-      <!-- ✅ Added Bookings -->
-      <button mat-button routerLink="/bookings" routerLinkActive="active">
-        Bookings
-      </button>
-
-      <button mat-button routerLink="/login" routerLinkActive="active">
-        Login
-      </button>
+      <!-- ✅ toggle login/logout -->
+      <a mat-button *ngIf="!auth.isLoggedIn()" routerLink="/login">Login</a>
+      <button mat-button *ngIf="auth.isLoggedIn()" (click)="logout()">Logout</button>
     </mat-toolbar>
   `,
   styles: [`
-    .spacer { flex: 1 1 auto; }
-    .brand { font-weight: bold; font-size: 1.4rem; cursor: pointer; letter-spacing: 1px; }
-    .active { background: rgba(255,255,255,0.1); border-bottom: 2px solid var(--accent-red); }
+    .toolbar { background: #5b21b6; color: white; }
+    .brand { font-weight: 700; font-size: 22px; }
+    .spacer { flex: 1; }
+    a, button { color: white !important; }
   `]
 })
-export class Navbar {}
+export class Navbar {
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    private snack: MatSnackBar
+  ) {}
+
+  goBookings() {
+    if (!this.auth.isLoggedIn()) {
+      this.snack.open('Please login to view bookings', 'Close', { duration: 2000 });
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/bookings']);
+  }
+
+  logout() {
+    this.auth.logout();
+    this.snack.open('Logged out ✅', 'Close', { duration: 1500 });
+    this.router.navigate(['/login']);
+  }
+}

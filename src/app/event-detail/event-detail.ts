@@ -13,6 +13,7 @@ import { BookingService } from '../services/booking.service';
 import { EventItem } from '../models/event.model';
 import { finalize } from 'rxjs/operators';
 import { ChangeDetectorRef } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { ChangeDetectorRef } from '@angular/core';
   imports: [
     CommonModule,
     RouterLink,
+    RouterOutlet,
     ReactiveFormsModule,
     MatCardModule,
     MatInputModule,
@@ -57,6 +59,10 @@ import { ChangeDetectorRef } from '@angular/core';
           </div>
 
           <hr />
+            <button mat-stroked-button color="primary" [routerLink]="['schedule']">
+            View Schedule
+            </button>
+            <hr />
 
           <div class="booking-section">
             <h3>Book Your Tickets</h3>
