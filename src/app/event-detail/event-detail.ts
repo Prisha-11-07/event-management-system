@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 
 import { EventService } from '../services/event.services';
-import { EventItem } from '../models/event.model';
 import { BookingService } from '../services/booking.service';
+import { EventItem } from '../models/event.model';
+import { finalize } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-event-detail',
@@ -21,7 +23,6 @@ import { BookingService } from '../services/booking.service';
     RouterLink,
     ReactiveFormsModule,
     MatCardModule,
-    MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule
@@ -110,7 +111,7 @@ import { BookingService } from '../services/booking.service';
                   mat-raised-button
                   color="accent"
                   type="submit"
-                  [disabled]="bookingForm.invalid || event.availableTickets === 0 || submitting"
+                  [disabled]="bookingForm.invalid || submitting || (toNum(event.availableTickets) === 0)"
                 >
                   {{ submitting ? 'Booking...' : 'Confirm Booking' }}
                 </button>
@@ -118,46 +119,24 @@ import { BookingService } from '../services/booking.service';
                 <button mat-button type="button" routerLink="/events">Back</button>
               </div>
 
-              <p class="soldout" *ngIf="event.availableTickets === 0">This event is Sold Out.</p>
+              <p class="soldout" *ngIf="toNum(event.availableTickets) === 0">
+                This event is Sold Out.
+              </p>
             </form>
           </div>
         </mat-card-content>
       </mat-card>
-
-      <p *ngIf="!loading && !event && !errorMsg">Event not found.</p>
     </div>
   `,
   styles: [`
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      color: white;
-    }
-
+    .container { max-width: 900px; margin: 20px auto; padding: 20px; color: white; }
     mat-card { background: #1e1e1e; }
-
     .image-wrapper { width: 100%; overflow: hidden; border-radius: 8px; }
     .cover { width: 100%; height: 320px; object-fit: cover; display: block; }
-
     .details p { margin: 6px 0; }
-
     mat-form-field { width: 100%; margin-bottom: 15px; }
-
-    .booking-section {
-      background: #2c2c2c;
-      padding: 18px;
-      border-radius: 8px;
-      margin-top: 18px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-top: 8px;
-    }
-
+    .booking-section { background: #2c2c2c; padding: 18px; border-radius: 8px; margin-top: 18px; }
+    .actions { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
     .error { color: #ff6b6b; margin-bottom: 10px; }
     .soldout { margin-top: 10px; color: #ffb3b3; }
   `]
@@ -176,7 +155,8 @@ export class EventDetail implements OnInit {
     private eventService: EventService,
     private bookingService: BookingService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
@@ -187,49 +167,94 @@ export class EventDetail implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (!id) {
-      this.errorMsg = 'Invalid event id.';
-      this.loading = false;
-      return;
-    }
+  const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.eventService.getEventById(id).subscribe({
-      next: (data: EventItem) => {
-        this.event = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMsg = 'Failed to load event details. Make sure JSON Server is running.';
-        this.loading = false;
-      }
-    });
+  console.log('Route id:', id);
+
+  if (!id) {
+    this.errorMsg = 'Invalid event id';
+    this.loading = false;
+    return;
   }
 
+  this.eventService.getEventById(id).subscribe({
+    next: (data: EventItem) => {
+      console.log('Event detail received:', data);
+
+      this.event = data;
+      this.loading = false;
+
+      this.cdr.detectChanges();   // ⭐ forces UI refresh
+    },
+
+    error: (err) => {
+      console.log('Event detail error:', err);
+      this.errorMsg = 'Failed to load event';
+      this.loading = false;
+
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+
+
+
+
   onSubmit(): void {
-    if (!this.bookingForm.valid || !this.event) return;
+  if (!this.bookingForm.valid || !this.event) return;
 
-    this.submitting = true;
+  const requestedTickets = Number(this.bookingForm.value.ticketCount);
 
-    const bookingPayload = {
-      eventId: this.event.id,
-      name: this.bookingForm.value.name,
-      email: this.bookingForm.value.email,
-      phone: this.bookingForm.value.phone,
-      ticketCount: Number(this.bookingForm.value.ticketCount),
-      bookedAt: new Date().toISOString()
-    };
+  // safety checks
+  if (requestedTickets <= 0) return;
+  if (this.event.availableTickets === 0) {
+    this.snackBar.open('Sold Out', 'Close', { duration: 2500 });
+    return;
+  }
+  if (requestedTickets > this.event.availableTickets) {
+    this.snackBar.open('Not enough tickets available', 'Close', { duration: 3000 });
+    return;
+  }
 
-    this.bookingService.createBooking(bookingPayload).subscribe({
-      next: () => {
-        this.submitting = false;
-        this.snackBar.open('Booking Confirmed!', 'Close', { duration: 3000 });
-        this.router.navigate(['/events']);
-      },
-      error: () => {
-        this.submitting = false;
-        this.snackBar.open('Booking failed. Please try again.', 'Close', { duration: 3000 });
-      }
-    });
+  this.submitting = true;
+
+  const bookingPayload = {
+    eventId: this.event.id, // can be string|number in your db, json-server accepts it
+    name: this.bookingForm.value.name,
+    email: this.bookingForm.value.email,
+    phone: this.bookingForm.value.phone,
+    ticketCount: requestedTickets,
+    bookedAt: new Date().toISOString()
+  };
+
+  this.bookingService.createBooking(bookingPayload).subscribe({
+    next: () => {
+      // ✅ reduce tickets in events table
+      const newTickets = Number(this.event!.availableTickets) - requestedTickets;
+
+      this.eventService.updateTickets(Number(this.event!.id), newTickets).subscribe({
+        next: (updated) => {
+          this.event = updated; // update UI instantly
+          this.submitting = false;
+          this.snackBar.open('Booking Confirmed!', 'Close', { duration: 3000 });
+          this.router.navigate(['/bookings']); // optional: go to bookings page
+        },
+        error: () => {
+          this.submitting = false;
+          this.snackBar.open('Booked, but ticket update failed!', 'Close', { duration: 3000 });
+          this.router.navigate(['/bookings']);
+        }
+      });
+    },
+    error: () => {
+      this.submitting = false;
+      this.snackBar.open('Booking failed. Please try again.', 'Close', { duration: 3000 });
+    }
+  });
+}
+
+  toNum(value: any): number {
+    return typeof value === 'number' ? value : Number(value);
   }
 }

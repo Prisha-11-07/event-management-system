@@ -11,9 +11,28 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     <mat-toolbar color="primary">
       <span class="brand" routerLink="/">JDPA Events</span>
       <span class="spacer"></span>
-      <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</button>
-      <button mat-button routerLink="/events" routerLinkActive="active">Events</button>
-      <button mat-button routerLink="/login" routerLinkActive="active">Login</button>
+
+      <button
+        mat-button
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Home
+      </button>
+
+      <button mat-button routerLink="/events" routerLinkActive="active">
+        Events
+      </button>
+
+      <!-- ✅ Added Bookings -->
+      <button mat-button routerLink="/bookings" routerLinkActive="active">
+        Bookings
+      </button>
+
+      <button mat-button routerLink="/login" routerLinkActive="active">
+        Login
+      </button>
     </mat-toolbar>
   `,
   styles: [`

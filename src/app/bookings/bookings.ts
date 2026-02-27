@@ -1,99 +1,96 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
-import { BookingService } from '../services/booking.service';
-import { Booking } from '../models/booking.model';
+import { BookingService, Booking } from '../services/booking.service';
 
 @Component({
   selector: 'app-bookings',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatSnackBarModule],
+  imports: [CommonModule],
   template: `
     <div class="container">
-      <h2>My Bookings</h2>
+      <h1 class="title">My <span>Bookings</span></h1>
 
+      <!-- Loading -->
       <p *ngIf="loading">Loading bookings...</p>
 
-      <table mat-table [dataSource]="bookings" class="mat-elevation-z2" *ngIf="!loading">
+      <!-- Empty -->
+      <p *ngIf="!loading && bookings.length === 0">
+        No bookings found.
+      </p>
 
-        <ng-container matColumnDef="eventId">
-          <th mat-header-cell *matHeaderCellDef> Event ID </th>
-          <td mat-cell *matCellDef="let b"> {{ b.eventId }} </td>
-        </ng-container>
+      <!-- Booking list -->
+      <ng-container *ngIf="!loading && bookings.length > 0">
+        <div class="card" *ngFor="let booking of bookings">
+          <p><b>Name:</b> {{ booking.name }}</p>
+          <p><b>Email:</b> {{ booking.email }}</p>
+          <p><b>Phone:</b> {{ booking.phone }}</p>
+          <p><b>Tickets:</b> {{ booking.ticketCount }}</p>
+          <p><b>Event ID:</b> {{ booking.eventId }}</p>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let b"> {{ b.name }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef> Email </th>
-          <td mat-cell *matCellDef="let b"> {{ b.email }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="tickets">
-          <th mat-header-cell *matHeaderCellDef> Tickets </th>
-          <td mat-cell *matCellDef="let b"> {{ b.ticketCount }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="bookedAt">
-          <th mat-header-cell *matHeaderCellDef> Booked At </th>
-          <td mat-cell *matCellDef="let b"> {{ b.bookedAt | date:'short' }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let b">
-            <button mat-raised-button color="warn" (click)="cancel(b.id)">Cancel</button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="cols"></tr>
-        <tr mat-row *matRowDef="let row; columns: cols;"></tr>
-      </table>
-
-      <p *ngIf="!loading && bookings.length === 0">No bookings yet.</p>
+          <button (click)="cancelBooking(booking.id)">Cancel Booking</button>
+        </div>
+      </ng-container>
     </div>
   `,
   styles: [`
-    .container { padding: 30px; max-width: 1000px; margin: 0 auto; }
-    table { width: 100%; margin-top: 15px; }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      color: white;
+    }
+
+    .title span {
+      color: red;
+    }
+
+    .card {
+      background: #1e1e1e;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    button {
+      background: crimson;
+      border: none;
+      padding: 8px 12px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   `]
 })
-export class Bookings implements OnInit {
+export class BookingsComponent implements OnInit {
+
   bookings: Booking[] = [];
   loading = true;
 
-  cols: string[] = ['eventId', 'name', 'email', 'tickets', 'bookedAt', 'action'];
-
-  constructor(private bookingService: BookingService, private snackBar: MatSnackBar) {}
+  constructor(
+    private bookingService: BookingService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.bookingService.getBookings().subscribe({
       next: (data) => {
-        this.bookings = data;
+        console.log('Bookings received:', data);
+        this.bookings = data ?? [];
         this.loading = false;
+        this.cdr.detectChanges(); // prevents ExpressionChanged error
       },
-      error: () => {
+      error: (err) => {
+        console.error('Booking load error:', err);
         this.loading = false;
-        this.snackBar.open('Failed to load bookings', 'Close', { duration: 3000 });
+        this.cdr.detectChanges();
       }
     });
   }
 
-  cancel(id: number): void {
-    this.bookingService.cancelBooking(id).subscribe({
-      next: () => {
-        this.bookings = this.bookings.filter(b => b.id !== id);
-        this.snackBar.open('Booking cancelled', 'Close', { duration: 3000 });
-      },
-      error: () => {
-        this.snackBar.open('Cancel failed', 'Close', { duration: 3000 });
-      }
+  cancelBooking(id: string | number | undefined) {
+    if (!id) return;
+
+    this.bookingService.cancelBooking(id).subscribe(() => {
+      this.bookings = this.bookings.filter(b => b.id !== id);
     });
   }
 }

@@ -1,18 +1,19 @@
 {
   "events": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Tech Conference 2026",
       "category": "Tech",
       "date": "2026-04-10",
       "location": "Bangalore",
       "price": 499,
-      "availableTickets": 120,
+      "availableTickets": 116,
       "featured": true,
-      "description": "A conference on modern web + AI."
+      "description": "A conference on modern web + AI.",
+      "imageUrl": "https://picsum.photos/800/400?random=1"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Music Night",
       "category": "Music",
       "date": "2026-03-18",
@@ -20,8 +21,37 @@
       "price": 299,
       "availableTickets": 0,
       "featured": false,
-      "description": "Live music event."
+      "description": "Live music event.",
+      "imageUrl": "https://picsum.photos/800/400?random=2"
     }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "id": "73d2",
+      "eventId": "1",
+      "name": "Prisha Sathishkumar",
+      "email": "prisha12225@gmail.com",
+      "phone": "9876543213",
+      "ticketCount": 1,
+      "bookedAt": "2026-02-26T17:23:49.489Z"
+    },
+    {
+      "id": "0bb7",
+      "eventId": "1",
+      "name": "Prisha Sathishkumar",
+      "email": "prisha12225@gmail.com",
+      "phone": "9876543235",
+      "ticketCount": 2,
+      "bookedAt": "2026-02-26T17:27:36.064Z"
+    },
+    {
+      "id": "fb4d",
+      "eventId": "1",
+      "name": "Prisha Sathishkumar",
+      "email": "prisha12225@gmail.com",
+      "phone": "9876543210",
+      "ticketCount": 1,
+      "bookedAt": "2026-02-26T17:37:08.099Z"
+    }
+  ]
 }

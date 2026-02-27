@@ -5,11 +5,17 @@ import { EventList } from './event-list/event-list';
 import { EventDetail } from './event-detail/event-detail';
 
 export const routes: Routes = [
-    { path: '', component: Home },           // Landing Page
-    { path: 'login', component: Login },     // Login Page
-    { path: 'events', component: EventList },// Events Grid
-    { path: 'event/:id', component: EventDetail }, // Detail
-    { path: '**', redirectTo: '' },
-    {path: 'bookings',loadComponent: () => import('./bookings/bookings').then(m => m.Bookings)
-}
+  { path: '', component: Home },
+  { path: 'login', component: Login },
+  { path: 'events', component: EventList },
+  { path: 'event/:id', component: EventDetail },
+
+  // ✅ Bookings page (lazy load standalone component)
+  {
+    path: 'bookings',
+    loadComponent: () =>
+      import('./bookings/bookings').then((m) => m.BookingsComponent),
+  },
+
+  { path: '**', redirectTo: '' },
 ];

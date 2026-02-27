@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,9 @@ import { EventItem } from '../models/event.model';
               [src]="event.imageUrl || 'https://via.placeholder.com/400x200'"
               alt="Event image"
             />
-            <div class="price-tag">{{ event.price | currency:'INR':'symbol':'1.0-0' }}</div>
+            <div class="price-tag">
+              {{ event.price | currency:'INR':'symbol':'1.0-0' }}
+            </div>
           </div>
 
           <mat-card-header>
@@ -45,14 +47,21 @@ import { EventItem } from '../models/event.model';
           </mat-card-content>
 
           <mat-card-actions align="end">
-            <button *ngIf="event.availableTickets === 0" mat-raised-button disabled>
+            <!-- SOLD OUT -->
+            <button
+              mat-raised-button
+              color="warn"
+              class="soldout-btn"
+              *ngIf="toNum(event.availableTickets) === 0"
+            >
               Sold Out
             </button>
 
+            <!-- BOOK NOW -->
             <button
-              *ngIf="event.availableTickets > 0"
               mat-raised-button
               color="primary"
+              *ngIf="toNum(event.availableTickets) > 0"
               [routerLink]="['/event', event.id]"
             >
               Book Now
@@ -66,15 +75,27 @@ import { EventItem } from '../models/event.model';
     .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
     .page-title { font-size: 2.5rem; margin-bottom: 30px; border-left: 5px solid #6200ea; padding-left: 15px; }
     .red-text { color: #d50000; }
+
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+
     .event-card { transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; background-color: #1e1e1e; color: white; }
     .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(98, 0, 234, 0.4); border-color: #6200ea; }
+
     .image-wrapper { position: relative; height: 200px; overflow: hidden; }
-    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; display:block; }
+    .image-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
     .price-tag { position: absolute; top: 10px; right: 10px; background: #d50000; color: white; padding: 5px 10px; font-weight: bold; border-radius: 4px; }
+
     .custom-subtitle { color: #aaa !important; margin-top: 5px; }
     mat-card-content { margin-top: 15px; min-height: 80px; }
+
     .error { color: #ff6b6b; margin-bottom: 12px; }
+
+    /* Make SOLD OUT visible */
+    .soldout-btn {
+      opacity: 1 !important;
+      pointer-events: none;
+    }
   `]
 })
 export class EventList implements OnInit {
@@ -82,19 +103,33 @@ export class EventList implements OnInit {
   loading = true;
   errorMsg = '';
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.loading = true;
+    this.errorMsg = '';
+
     this.eventService.getEvents().subscribe({
       next: (data: EventItem[]) => {
-        this.events = data;
+        this.events = data ?? [];
         this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: () => {
-        this.errorMsg =
-          'Failed to load events. Make sure JSON Server is running on http://localhost:3000';
+      error: (err) => {
+        console.log('Events API error:', err);
+        this.errorMsg = 'Failed to load events. Check JSON Server (http://localhost:3000)';
+        this.events = [];
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  /* Helper to fix Number() template error */
+  toNum(value: any): number {
+    return typeof value === 'number' ? value : Number(value);
   }
 }
