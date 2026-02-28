@@ -13,18 +13,14 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'events', component: EventList },
 
-  // ✅ parent route + child route
-  {
-    path: 'event/:id',
-    component: EventDetail,
-    children: [
-      { path: 'schedule', component: EventScheduleComponent },
-    ],
-  },
+  // ✅ Event detail
+  { path: 'event/:id', component: EventDetail },
 
-  // ✅ protected route
+  // ✅ Schedule page (simple nested URL)
+  { path: 'event/:id/schedule', component: EventScheduleComponent },
+
+  // ✅ protected bookings
   { path: 'bookings', component: BookingsComponent, canActivate: [authGuard] },
 
-  // ✅ wildcard last
   { path: '**', redirectTo: '' },
 ];

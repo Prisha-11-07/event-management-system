@@ -22,6 +22,8 @@ import { AuthService } from '../services/auth.service';
     MatSnackBarModule
   ],
   template: `
+  <div class="page-bg login-bg">
+  <div class="login-wrapper">
     <div class="container">
       <mat-card class="card">
         <h2>JDPA Events Login</h2>
@@ -51,6 +53,28 @@ import { AuthService } from '../services/auth.service';
     .card { padding: 22px; background: #1e1e1e; color: white; border-radius: 14px; }
     button { width: 100%; margin-top: 10px; }
     mat-form-field { width: 100%; margin-bottom: 14px; }
+    .login-bg {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+              url('https://tse2.mm.bing.net/th/id/OIP.33KG6ZKmIA7JFCHhFQvezQHaE8?pid=Api&h=220&P=0');
+  background-size: cover;
+  background-position: center;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+  .page-bg {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
   `]
 })
 export class Login {

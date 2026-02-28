@@ -1,12 +1,12 @@
 export interface EventItem {
-  id: number;
+  id: string | number;          // ✅ allow both
   title: string;
   category: string;
   date: string;
   location: string;
+  description: string;
   price: number;
   availableTickets: number;
+  imageUrl?: string;
   featured?: boolean;
-  description: string;
-  imageUrl?: string;   // ⭐ ADD THIS LINE
 }

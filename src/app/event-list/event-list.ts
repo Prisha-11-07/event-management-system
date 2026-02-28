@@ -29,6 +29,8 @@ import { HighlightEventDirective } from '../directives/highlight-event.directive
     HighlightEventDirective,
   ],
   template: `
+  <div class="page-bg events-bg">
+  <div class="content">
     <div class="wrap">
       <h1 class="title">Events</h1>
 
@@ -103,8 +105,10 @@ import { HighlightEventDirective } from '../directives/highlight-event.directive
       gap: 16px;
     }
 
-    .card { background: #1e1e1e; border-radius: 14px; overflow: hidden; }
+    .card { background: rgba(255, 255, 255, 0.05); border-radius: 14px; overflow: hidden; }
     .img { width: 100%; height: 170px; object-fit: cover; display: block; }
+    .card {transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .card:hover {transform: translateY(-6px);box-shadow: 0 8px 25px rgba(0,0,0,0.5);}
 
     .name { margin: 10px 0 6px; font-size: 20px; }
     .meta { margin: 4px 0; opacity: 0.9; }
@@ -131,6 +135,43 @@ import { HighlightEventDirective } from '../directives/highlight-event.directive
       margin-top: 10px;
       margin-left: 8px;
     }
+      .page-bg {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 40px 20px;
+}
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+/* Events background */
+.events-bg {
+  background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+              url('https://tse4.mm.bing.net/th/id/OIP.8wfNNJv8cZCShQBQ5IEKNQHaE8?pid=Api&h=220&P=0');
+}
+              .page-bg {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+  .container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 30px;
+}
   `],
 })
 export class EventList {

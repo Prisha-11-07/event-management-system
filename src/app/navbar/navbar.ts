@@ -13,7 +13,9 @@ import { AuthService } from '../services/auth.service';
   imports: [CommonModule, RouterLink, MatToolbarModule, MatButtonModule, MatSnackBarModule],
   template: `
     <mat-toolbar class="toolbar">
-      <span class="brand">JDPA Events</span>
+      <span class="brand">
+  JDPA <span class="accent">EVENTS</span>
+</span>
 
       <span class="spacer"></span>
 
@@ -29,8 +31,34 @@ import { AuthService } from '../services/auth.service';
     </mat-toolbar>
   `,
   styles: [`
-    .toolbar { background: #5b21b6; color: white; }
-    .brand { font-weight: 700; font-size: 22px; }
+    .toolbar {
+  background: rgba(20, 20, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+    .brand {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 2.5s ease-in-out infinite alternate;
+}
+
+.accent {
+  font-weight: 900;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px rgba(139, 92, 246, 0.4);
+  }
+  to {
+    text-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+  }
+}
     .spacer { flex: 1; }
     a, button { color: white !important; }
   `]

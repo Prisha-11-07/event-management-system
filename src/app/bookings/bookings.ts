@@ -14,6 +14,8 @@ import { ConfirmDialog } from './confirm-dialog';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatSnackBarModule, MatButtonModule],
   template: `
+  <div class="page-bg bookings-bg">
+  <div class="content">
     <div class="container">
       <h1 class="title">My <span>Bookings</span></h1>
 
@@ -66,6 +68,22 @@ import { ConfirmDialog } from './confirm-dialog';
       button {
         margin-top: 10px;
       }
+      .bookings-bg {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+              url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+              .page-bg {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
     `,
   ],
 })

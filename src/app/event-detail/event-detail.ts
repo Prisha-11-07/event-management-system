@@ -59,9 +59,9 @@ import { RouterOutlet } from '@angular/router';
           </div>
 
           <hr />
-            <button mat-stroked-button color="primary" [routerLink]="['schedule']">
-            View Schedule
-            </button>
+          <button mat-stroked-button color="primary" [routerLink]="['/event', event?.id, 'schedule']">
+          View Schedule
+          </button>
             <hr />
 
           <div class="booking-section">
