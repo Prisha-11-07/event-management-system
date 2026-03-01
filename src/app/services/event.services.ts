@@ -1,34 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { EventItem } from '../models/event.model';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
-  private readonly apiUrl = 'http://localhost:3000/events';
+
+  // ✅ base should be only host
+  private apiBase = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  // LIST
+  // ✅ GET all events
   getEvents(): Observable<EventItem[]> {
-    console.log('Calling LIST API:', this.apiUrl);
-    return this.http.get<EventItem[]>(this.apiUrl).pipe(
-      tap((data) => console.log('Events received:', data))
-    );
+    return this.http.get<EventItem[]>(`${this.apiBase}/events`);
   }
 
-  // DETAIL  /events/:id
+  // ✅ GET event by id
   getEventById(id: number): Observable<EventItem> {
-    const url = `${this.apiUrl}/${id}`;
-    console.log('Calling DETAIL API:', url);
-    return this.http.get<EventItem>(url).pipe(
-      tap((data) => console.log('Event detail received:', data))
-    );
+    return this.http.get<EventItem>(`${this.apiBase}/events/${id}`);
   }
 
-  // PATCH tickets
-  updateTickets(id: number, newAvailableTickets: number): Observable<EventItem> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.patch<EventItem>(url, { availableTickets: newAvailableTickets });
+  // ✅ update tickets
+  updateTickets(id: number, availableTickets: number): Observable<EventItem> {
+    return this.http.patch<EventItem>(
+      `${this.apiBase}/events/${id}`,
+      { availableTickets }
+    );
   }
 }

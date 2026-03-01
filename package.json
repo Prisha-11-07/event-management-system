@@ -9,7 +9,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:event-management-system": "node dist/event-management-system/server/server.mjs"
-
   },
   "prettier": {
     "printWidth": 100,
@@ -26,6 +25,7 @@
   "private": true,
   "packageManager": "npm@10.9.2",
   "dependencies": {
+    "@angular/animations": "^21.1.1",
     "@angular/cdk": "~21.1.1",
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",
