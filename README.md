@@ -1,26 +1,22 @@
-Here is a **fully updated professional `README.md` with deployment links included**. You can **copy-paste this directly into your GitHub README**.
-
----
-
-```md
 # 🎟️ Event Management and Booking System (Angular + TypeScript)
 
-A modern **Single Page Application (SPA)** built using **Angular and TypeScript** that allows users to browse events, view event details, book tickets, and manage their bookings.  
+A modern **Single Page Application (SPA)** built using **Angular and TypeScript** that allows users to browse events, view event details, book tickets, and manage their bookings.
+
 The project demonstrates important Angular concepts such as **component-based architecture, routing, services, forms, and Angular Material UI design**.
 
 ---
 
 # 🌐 Live Deployment
 
-### 🚀 Frontend (Vercel)
-Live Website:  
+## 🚀 Frontend (Vercel)
+Live Website  
 https://event-management-system-three-tan.vercel.app/
 
-### ⚙️ Backend API (Render)
-API Base URL:  
+## ⚙️ Backend API (Render)
+API Base URL  
 https://event-management-system-lpb0.onrender.com
 
-Example API Endpoints:
+Example API Endpoints
 
 Events Data  
 https://event-management-system-lpb0.onrender.com/events
@@ -31,7 +27,8 @@ https://event-management-system-lpb0.onrender.com/bookings
 ---
 
 # 📌 Project Title
-**Event Management and Booking System using Angular and TypeScript**
+
+Event Management and Booking System using Angular and TypeScript
 
 ---
 
@@ -73,24 +70,24 @@ The system enables users to:
 
 # ✨ Features
 
-### 📅 Event Listing
+## 📅 Event Listing
 - Displays all available events
 - Dynamic UI rendering using Angular directives
 - Clean card layout using Angular Material
 
-### 🔎 Event Details
+## 🔎 Event Details
 - View complete event information
 - Uses **route parameters (`/event/:id`)**
 
-### 🎫 Event Booking
+## 🎫 Event Booking
 - Users can book tickets for events
 - Booking form with validations
 
-### 📋 Booking Management
+## 📋 Booking Management
 - View all bookings
 - Cancel booking functionality
 
-### ⚡ Angular Features Implemented
+## ⚡ Angular Features Implemented
 - Component Based Architecture
 - Angular Routing
 - Services & Dependency Injection
@@ -104,11 +101,11 @@ The system enables users to:
 
 # 🧱 Core Angular Components
 
-- **event-list** → Displays all events
-- **event-detail** → Shows event information
-- **booking-form** → Ticket booking form
-- **bookings** → Shows user bookings
-- **navbar** → Navigation bar for routing
+- **event-list** → Displays all events  
+- **event-detail** → Shows event information  
+- **booking-form** → Ticket booking form  
+- **bookings** → Shows user bookings  
+- **navbar** → Navigation bar for routing  
 
 ---
 
@@ -116,35 +113,33 @@ The system enables users to:
 
 | Route | Description |
 |------|-------------|
-| `/events` | Display all events |
-| `/event/:id` | View event details |
-| `/bookings` | View booked tickets |
+| /events | Display all events |
+| /event/:id | View event details |
+| /bookings | View booked tickets |
 
 ---
 
 # 📁 Project Structure
 
-```
 
 event-management-system
 │
 ├── src
-│   ├── app
-│   │   ├── components
-│   │   ├── services
-│   │   ├── models
-│   │   ├── app.routes.ts
-│   │   └── app.component.ts
-│   │
-│   ├── assets
-│   └── styles.css
+│ ├── app
+│ │ ├── components
+│ │ ├── services
+│ │ ├── models
+│ │ ├── app.routes.ts
+│ │ └── app.component.ts
+│ │
+│ ├── assets
+│ └── styles.css
 │
 ├── db.json
 ├── server.js
 ├── package.json
 └── README.md
 
-````
 
 ---
 
@@ -152,137 +147,121 @@ event-management-system
 
 ## 1️⃣ Clone the Repository
 
-```bash
+
 git clone https://github.com/Prisha-11-07/event-management-system.git
+
 cd event-management-system
-````
+
 
 ---
 
 ## 2️⃣ Install Dependencies
 
-```bash
+
 npm install
-```
+
 
 ---
 
 ## 3️⃣ Run Backend Server (JSON Server)
 
-```bash
+
 npm run start
-```
 
-Backend will run at:
 
-```
+Backend will run at
+
+
 http://localhost:3000
-```
 
-API Endpoints:
 
-```
+API Endpoints
+
+
 http://localhost:3000/events
+
 http://localhost:3000/bookings
-```
+
 
 ---
 
 ## 4️⃣ Run Angular Frontend
 
-```bash
+
 ng serve
-```
 
-Open browser:
 
-```
+Open browser
+
+
 http://localhost:4200
-```
+
 
 ---
 
 # 🏗️ Build Project
 
-To build the project for production:
+To build the project for production
 
-```bash
+
 ng build
-```
 
-Output will be stored in:
 
-```
+Output will be stored in
+
+
 dist/
-```
+
 
 ---
 
 # 🔧 Deployment Architecture
 
-```
+
 Frontend (Angular)
-        │
-        ▼
+│
+▼
 Vercel Hosting
 https://event-management-system-three-tan.vercel.app
-        │
-        ▼
+
+│
+▼
 Backend API (JSON Server)
 Render Cloud Hosting
 https://event-management-system-lpb0.onrender.com
-```
+
 
 ---
 
 # 📦 Deliverables
 
-✔ Complete Angular Application
-✔ Event Listing and Event Detail pages
-✔ Ticket Booking System
-✔ Booking Management Page
-✔ Form Validation
-✔ Angular Material UI Integration
-✔ Mock Backend API using JSON Server
+✔ Complete Angular Application  
+✔ Event Listing and Event Detail pages  
+✔ Ticket Booking System  
+✔ Booking Management Page  
+✔ Form Validation  
+✔ Angular Material UI Integration  
+✔ Mock Backend API using JSON Server  
 ✔ Cloud Deployment (Vercel + Render)
-
 
 ---
 
 # 👩‍💻 Author
 
-**Prisha Sathishkumar**
+Prisha Sathishkumar
 
-GitHub Profile
-[https://github.com/Prisha-11-07](https://github.com/Prisha-11-07)
-
+GitHub  
+https://github.com/Prisha-11-07
 
 ---
 
 # 📚 References
 
-Angular CLI
-[https://angular.dev/tools/cli](https://angular.dev/tools/cli)
+Angular CLI  
+https://angular.dev/tools/cli
 
-Angular Material
-[https://material.angular.io/](https://material.angular.io/)
+Angular Material  
+https://material.angular.io/
 
-JSON Server
-[https://github.com/typicode/json-server](https://github.com/typicode/json-server)
-
-```
-
----
-
-✅ This README now includes  
-- **Project explanation**  
-- **Deployment links (Vercel + Render)**  
-- **Architecture diagram**  
-- **Setup steps**  
-- **Features & components**  
-- **Professional structure for GitHub / lab evaluation**
-
----
-
-If you want, I can also give you a **🔥 much more impressive GitHub README (with badges, preview images, and animated sections)** that will make your project **look like a real industry project instead of a college one.**
-```
+JSON Server  
+https://github.com/typicode/json-server
