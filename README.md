@@ -247,11 +247,11 @@ https://event-management-system-lpb0.onrender.com
 ---
 
 # 👩‍💻 Author
-
-Prisha Sathishkumar
-
 GitHub  
-https://github.com/Prisha-11-07
+[Prisha S](https://github.com/Prisha-11-07)
+
+[Dinesh Babu R S](https://github.com/dineshbaburs)
+
 
 ---
 
