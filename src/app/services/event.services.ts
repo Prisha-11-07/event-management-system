@@ -7,7 +7,7 @@ import { EventItem } from '../models/event.model';
 export class EventService {
 
   // ✅ base should be only host
-  private apiBase = 'http://localhost:3000';
+  private apiBase = 'https://event-management-system-lpb0.onrender.com';
 
   constructor(private http: HttpClient) {}
 

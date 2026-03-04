@@ -16,7 +16,7 @@ export interface Booking {
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
-  private readonly apiUrl = 'http://localhost:3000/bookings';
+  private readonly apiUrl = 'https://event-management-system-lpb0.onrender.com/bookings';
 
   constructor(private http: HttpClient) {}
 
