@@ -1,59 +1,288 @@
-# EventManagementSystem
+Here is a **fully updated professional `README.md` with deployment links included**. You can **copy-paste this directly into your GitHub README**.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+---
 
-## Development server
+```md
+# 🎟️ Event Management and Booking System (Angular + TypeScript)
 
-To start a local development server, run:
+A modern **Single Page Application (SPA)** built using **Angular and TypeScript** that allows users to browse events, view event details, book tickets, and manage their bookings.  
+The project demonstrates important Angular concepts such as **component-based architecture, routing, services, forms, and Angular Material UI design**.
+
+---
+
+# 🌐 Live Deployment
+
+### 🚀 Frontend (Vercel)
+Live Website:  
+https://event-management-system-three-tan.vercel.app/
+
+### ⚙️ Backend API (Render)
+API Base URL:  
+https://event-management-system-lpb0.onrender.com
+
+Example API Endpoints:
+
+Events Data  
+https://event-management-system-lpb0.onrender.com/events
+
+Bookings Data  
+https://event-management-system-lpb0.onrender.com/bookings
+
+---
+
+# 📌 Project Title
+**Event Management and Booking System using Angular and TypeScript**
+
+---
+
+# 🎯 Objective
+
+Design and develop an **Event Management and Booking System** using Angular and TypeScript to apply modern front-end development concepts such as:
+
+- Component-based architecture
+- Routing and navigation
+- Services and Dependency Injection
+- Forms and validation
+- Angular Material UI components
+- Dynamic UI rendering in a Single Page Application (SPA)
+
+The system enables users to:
+
+- Browse available events
+- View event details
+- Book tickets
+- Manage and cancel bookings
+
+---
+
+# 🧰 Technologies Used
+
+| Technology | Purpose |
+|------------|--------|
+| Angular | Frontend Framework |
+| TypeScript | Programming Language |
+| Angular Material | UI Components |
+| Node.js | Runtime Environment |
+| JSON Server | Mock Backend API |
+| Angular CLI | Project Development Tool |
+| Visual Studio Code | Development Environment |
+| Vercel | Frontend Deployment |
+| Render | Backend Deployment |
+
+---
+
+# ✨ Features
+
+### 📅 Event Listing
+- Displays all available events
+- Dynamic UI rendering using Angular directives
+- Clean card layout using Angular Material
+
+### 🔎 Event Details
+- View complete event information
+- Uses **route parameters (`/event/:id`)**
+
+### 🎫 Event Booking
+- Users can book tickets for events
+- Booking form with validations
+
+### 📋 Booking Management
+- View all bookings
+- Cancel booking functionality
+
+### ⚡ Angular Features Implemented
+- Component Based Architecture
+- Angular Routing
+- Services & Dependency Injection
+- HTTP Client API Calls
+- RxJS Observables
+- Form Validation
+- Angular Material UI
+- Custom Pipes & Directives
+
+---
+
+# 🧱 Core Angular Components
+
+- **event-list** → Displays all events
+- **event-detail** → Shows event information
+- **booking-form** → Ticket booking form
+- **bookings** → Shows user bookings
+- **navbar** → Navigation bar for routing
+
+---
+
+# 🗺️ Application Routes
+
+| Route | Description |
+|------|-------------|
+| `/events` | Display all events |
+| `/event/:id` | View event details |
+| `/bookings` | View booked tickets |
+
+---
+
+# 📁 Project Structure
+
+```
+
+event-management-system
+│
+├── src
+│   ├── app
+│   │   ├── components
+│   │   ├── services
+│   │   ├── models
+│   │   ├── app.routes.ts
+│   │   └── app.component.ts
+│   │
+│   ├── assets
+│   └── styles.css
+│
+├── db.json
+├── server.js
+├── package.json
+└── README.md
+
+````
+
+---
+
+# ⚙️ Local Setup Instructions
+
+## 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/Prisha-11-07/event-management-system.git
+cd event-management-system
+````
+
+---
+
+## 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+## 3️⃣ Run Backend Server (JSON Server)
+
+```bash
+npm run start
+```
+
+Backend will run at:
+
+```
+http://localhost:3000
+```
+
+API Endpoints:
+
+```
+http://localhost:3000/events
+http://localhost:3000/bookings
+```
+
+---
+
+## 4️⃣ Run Angular Frontend
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open browser:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+# 🏗️ Build Project
 
-## Building
-
-To build the project run:
+To build the project for production:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Output will be stored in:
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+dist/
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+# 🔧 Deployment Architecture
 
-```bash
-ng e2e
+```
+Frontend (Angular)
+        │
+        ▼
+Vercel Hosting
+https://event-management-system-three-tan.vercel.app
+        │
+        ▼
+Backend API (JSON Server)
+Render Cloud Hosting
+https://event-management-system-lpb0.onrender.com
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+# 📦 Deliverables
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+✔ Complete Angular Application
+✔ Event Listing and Event Detail pages
+✔ Ticket Booking System
+✔ Booking Management Page
+✔ Form Validation
+✔ Angular Material UI Integration
+✔ Mock Backend API using JSON Server
+✔ Cloud Deployment (Vercel + Render)
+
+
+---
+
+# 👩‍💻 Author
+
+**Prisha Sathishkumar**
+
+GitHub Profile
+[https://github.com/Prisha-11-07](https://github.com/Prisha-11-07)
+
+
+---
+
+# 📚 References
+
+Angular CLI
+[https://angular.dev/tools/cli](https://angular.dev/tools/cli)
+
+Angular Material
+[https://material.angular.io/](https://material.angular.io/)
+
+JSON Server
+[https://github.com/typicode/json-server](https://github.com/typicode/json-server)
+
+```
+
+---
+
+✅ This README now includes  
+- **Project explanation**  
+- **Deployment links (Vercel + Render)**  
+- **Architecture diagram**  
+- **Setup steps**  
+- **Features & components**  
+- **Professional structure for GitHub / lab evaluation**
+
+---
+
+If you want, I can also give you a **🔥 much more impressive GitHub README (with badges, preview images, and animated sections)** that will make your project **look like a real industry project instead of a college one.**
+```
